@@ -12,10 +12,16 @@ import argparse
 import socket
 
 parser = argparse.ArgumentParser()
+
 parser.add_argument(
-    "-d", "--directory",
+    "target",
+    help="Target host or IP address."
+)
+
+parser.add_argument(
+    "-d", "--path",
     required=True,
-    help="The directory that will receive the requests. Example: /login, /admin, etc."
+    help="Path of the endpoint that will receive the requests. Example: /login, /admin, etc."
 )
 
 parser.add_argument(
@@ -45,11 +51,15 @@ parser.add_argument(
 args = parser.parse_args()
 
 print(f'\nTarget: {args.target}')
-print(f'\nDirectory: {args.directory}')
+print(f'\nPath: {args.path}')
 print(f'\nUser: {args.user}')
 print(f'\nWord list: {args.word_list}')
 print(f'\nUser field: {args.user_field}')
 print(f'\nPassword field: {args.password_field}\n')
+
+with open('test.txt', 'r') as file:
+    for line in file:
+        print(line.strip())
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.settimeout(0.5)
