@@ -20,6 +20,13 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "-p", "--port",
+    type=int,
+    required=True,
+    help="Target TCP port."
+)
+
+parser.add_argument(
     "-d", "--path",
     required=True,
     help="Path of the endpoint that will receive the requests. Example: /login, /admin, etc."
@@ -52,11 +59,12 @@ parser.add_argument(
 args = parser.parse_args()
 
 print(f'\nTarget: {args.target}')
-print(f'\nPath: {args.path}')
-print(f'\nUser: {args.user}')
-print(f'\nWord list: {args.word_list}')
-print(f'\nUser field: {args.user_field}')
-print(f'\nPassword field: {args.password_field}\n')
+print(f'TCP port: {args.port}')
+print(f'Path: {args.path}')
+print(f'User: {args.user}')
+print(f'Word list: {args.word_list}')
+print(f'User field: {args.user_field}')
+print(f'Password field: {args.password_field}\n')
 
 
 path = Path(args.word_list)
@@ -72,11 +80,17 @@ if path.is_dir():
 print(f'"{path}" is a valid file!\n')
 
 with open(path, 'r') as file:
+    index = 1 
     for line in file:
-        print(line.strip())
+        print(f'{index}º attempt: {args.user_field}:{args.user}&{args.password_field}:{line.strip()}')
+        index += 1
+
+target_ip = socket.gethostbyname(args.target)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.settimeout(0.5)
-print(client, '\n')
+
+client.connect((target_ip, args.port))
+print('\n', client, '\n')
 
 
