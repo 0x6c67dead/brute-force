@@ -10,6 +10,7 @@ print("""\033[35m
 
 import argparse
 import socket
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 
@@ -57,7 +58,20 @@ print(f'\nWord list: {args.word_list}')
 print(f'\nUser field: {args.user_field}')
 print(f'\nPassword field: {args.password_field}\n')
 
-with open('test.txt', 'r') as file:
+
+path = Path(args.word_list)
+
+if not path.exists():
+    print('Invalid path: file does not exist.')
+    exit(1)
+
+if path.is_dir():
+    print('Invalid path: expected a file, but got a directory.')
+    exit(1)
+
+print(f'"{path}" is a valid file!\n')
+
+with open(path, 'r') as file:
     for line in file:
         print(line.strip())
 
